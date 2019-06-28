@@ -1,8 +1,8 @@
-const converter = require('../data/converter.data')
+const parser = require('../services/parser.service')
 
 exports.post = async function (req, res, next) {
   const input = req.body
-  const output = converter.convert(input)
+  const output = parser.parse(input)
   res.status(200).send({
     data: output
   })

@@ -1,12 +1,12 @@
 const buttons = require('../model/buttons.model')
 const papa = require('papaparse')
 
-function convert (input) {
+function parse (input) {
   let data = cleanInput(papa.parse(input).data)
   console.log(data)
   return data
 }
-exports.convert = convert
+exports.parse = parse
 
 function checkButton (button) {
   if (buttons.SAMSUNG_FREQ.hasOwnProperty(button)) {
@@ -40,6 +40,7 @@ function cleanInput (data) {
       if (button) {
         data[i][1] = button
       } else {
+        console.log('Removing : ', data[i])
         data.splice(i, 1)
         i--
       }
