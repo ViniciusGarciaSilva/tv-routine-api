@@ -1,0 +1,28 @@
+{
+  "name": "tv-routine-data-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViniciusGarciaSilva/tv-routine-data-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ViniciusGarciaSilva/tv-routine-data-api/issues"
+  },
+  "homepage": "https://github.com/ViniciusGarciaSilva/tv-routine-data-api#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "papaparse": "^5.0.0",
+    "standard": "^12.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1"
+  }
+}
