@@ -1,57 +1,70 @@
 function interpretate (data) {
   console.log('Interpretating')
-  let isFinished = true
+  let isFinished
+  let start = data[0].date
+  let finish = 0
   let lastChannel = 500
   let channel = 500
   let nextChannel = 500
   let isMenu = false
-  console.log(data)
+  let routine = []
   for (let i = 0; i < data.length; i++) {
-    console.log(data[i])
+    // console.log('\r\n', data[i])
     switch (data[i].button) {
       // CHANNEL
       case 'NET_ONE':
-        nextChannel = parseChannel(nextChannel, 1)
+        nextChannel = composeChannel(nextChannel, 1)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_TWO':
-        nextChannel = parseChannel(nextChannel, 2)
+        nextChannel = composeChannel(nextChannel, 2)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_THREE':
-        nextChannel = parseChannel(nextChannel, 3)
+        nextChannel = composeChannel(nextChannel, 3)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_FOUR':
-        nextChannel = parseChannel(nextChannel, 4)
+        nextChannel = composeChannel(nextChannel, 4)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_FIVE':
-        nextChannel = parseChannel(nextChannel, 5)
+        nextChannel = composeChannel(nextChannel, 5)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_SIX':
-        nextChannel = parseChannel(nextChannel, 6)
+        nextChannel = composeChannel(nextChannel, 6)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_SEVEN':
-        nextChannel = parseChannel(nextChannel, 7)
+        nextChannel = composeChannel(nextChannel, 7)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_EIGHT':
-        nextChannel = parseChannel(nextChannel, 8)
+        nextChannel = composeChannel(nextChannel, 8)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_NINE':
-        nextChannel = parseChannel(nextChannel, 9)
+        nextChannel = composeChannel(nextChannel, 9)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
       case 'NET_ZERO':
-        nextChannel = parseChannel(nextChannel, 0)
+        nextChannel = composeChannel(nextChannel, 0)
+        isFinished = data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000
         break
 
       // USEFUL BUTTONS
       case 'NET_CHANNELUP':
-        nextChannel++ // missing logic of the last channel
+        nextChannel = channel + 1 // missing logic of the last channel
+        isFinished = true
         break
       case 'NET_CHANNELDOWN':
-        nextChannel--
+        nextChannel = channel - 1
         isFinished = true // todo: delay? Change the channel everytime
         break
       case 'NET_BACK':
         if (!isMenu) {
-          channel = lastChannel
+          nextChannel = lastChannel
           isFinished = true
         }
         break
@@ -114,19 +127,29 @@ function interpretate (data) {
         break
     }
     console.log('Switch end. Last Channel: ' + lastChannel + ' Channel: ' + channel + ' NextChannel: ' + nextChannel)
-    if (data[i + 1] && (data[i + 1].date.getTime() - data[i].date.getTime()) > 3000) {
+    if ((isFinished && nextChannel !== channel && nextChannel !== 0)) {
+      finish = data[i].date
+      routine.push({
+        channel: channel,
+        start: start,
+        finish: finish,
+        time: finish - start
+      })
       lastChannel = channel
       channel = nextChannel
       nextChannel = 0
-      console.log('Modificando. Last Channel: ' + lastChannel + ' Channel: ' + channel + ' NextChannel: ' + nextChannel)
+      isFinished = false
+      start = data[i].date
+      // console.log('Modifying. Last Channel: ' + lastChannel + ' Channel: ' + channel + ' NextChannel: ' + nextChannel)
     }
   }
+  return routine
 }
 exports.interpretate = interpretate
 
 // if channel has 3 digits and receive another digit, it means a wrong channel and the next channel will be the new digit
 // if channel has less than 3 digits, the new digit will be added to the next channel
-function parseChannel (nextChannel, number) {
+function composeChannel (nextChannel, number) {
   if (nextChannel > 100) {
     return number
   } else {
