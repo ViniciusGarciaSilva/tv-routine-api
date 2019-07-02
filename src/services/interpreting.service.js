@@ -13,6 +13,16 @@ function interpretate (data) {
       case 'NET_NINE':
       case 'NET_ZERO':
         break
+      // USEFUL BUTTONS
+      case 'NET_CHANNELUP':
+      case 'NET_CHANNELDOWN':
+      case 'NET_BACK':
+      case 'NET_UP':
+      case 'NET_DOWN':
+      case 'NET_LEFT':
+      case 'NET_RIGHT':
+      case 'SAM_POWER':
+        break
       // EXTRA MENU NAVIGATION
       case 'NET_PORTAL':
       case 'NET_MOSAIC':
@@ -33,16 +43,6 @@ function interpretate (data) {
       case 'SAM_CENTER':
       case 'SAM_RETURN':
       case 'SAM_HOME':
-        break
-      // USEFUL BUTTONS
-      case 'NET_CHANNELUP':
-      case 'NET_CHANNELDOWN':
-      case 'NET_BACK':
-      case 'NET_UP':
-      case 'NET_DOWN':
-      case 'NET_LEFT':
-      case 'NET_RIGHT':
-      case 'SAM_POWER':
         break
       // USELESS BUTTONS
       case 'NET_VOLUMEUP':
