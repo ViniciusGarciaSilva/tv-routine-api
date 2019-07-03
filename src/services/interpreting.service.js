@@ -15,43 +15,43 @@ function interpretate (command) {
       // CHANNEL
       case 'NET_ONE':
         nextChannel = composeChannel(nextChannel, 1)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_TWO':
         nextChannel = composeChannel(nextChannel, 2)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_THREE':
         nextChannel = composeChannel(nextChannel, 3)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_FOUR':
         nextChannel = composeChannel(nextChannel, 4)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_FIVE':
         nextChannel = composeChannel(nextChannel, 5)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_SIX':
         nextChannel = composeChannel(nextChannel, 6)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_SEVEN':
         nextChannel = composeChannel(nextChannel, 7)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_EIGHT':
         nextChannel = composeChannel(nextChannel, 8)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_NINE':
         nextChannel = composeChannel(nextChannel, 9)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
       case 'NET_ZERO':
         nextChannel = composeChannel(nextChannel, 0)
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
         break
 
       // USEFUL BUTTONS
@@ -171,5 +171,5 @@ function composeChannel (nextChannel, number) {
 
 // 3000 miliseconds delay between a command and another command
 function checkFinished (time1, time2) {
-  return time1 - time2 > 3000
+  return time2 - time1 > 3000
 }
