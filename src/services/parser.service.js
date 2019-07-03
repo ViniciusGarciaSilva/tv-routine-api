@@ -1,12 +1,12 @@
 const buttons = require('../model/buttons.model')
 const papa = require('papaparse')
 
-function convert (input) {
-  let data = cleanInput(papa.parse(input).data)
-  console.log(data)
-  return data
+function parse (input) {
+  let commands = cleanInput(papa.parse(input).data)
+  console.log(commands)
+  return commands
 }
-exports.convert = convert
+exports.parse = parse
 
 function checkButton (button) {
   if (buttons.SAMSUNG_FREQ.hasOwnProperty(button)) {
@@ -27,6 +27,7 @@ function checkButton (button) {
   }
 }
 
+// Check if the command is a Infrared command and if is a valid button. Returns an array with DATE and BUTTON attributes
 function cleanInput (data) {
   let button
   for (let i = 0; i < data.length; i++) {
@@ -40,6 +41,7 @@ function cleanInput (data) {
       if (button) {
         data[i][1] = button
       } else {
+        console.log('Removing : ', data[i])
         data.splice(i, 1)
         i--
       }
