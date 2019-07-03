@@ -3,28 +3,20 @@ const papa = require('papaparse')
 
 function parse (input) {
   let commands = cleanInput(papa.parse(input).data)
+  commands.sort(compareDate)
   console.log(commands)
   return commands
 }
 exports.parse = parse
 
-function checkButton (button) {
-  if (buttons.SAMSUNG_FREQ.hasOwnProperty(button)) {
-    console.log('SAMSUNG FREQUENCY BUTTON: ', buttons.SAMSUNG_FREQ[button])
-    return buttons.SAMSUNG_FREQ[button]
-  } else if (buttons.NET_FREQ.hasOwnProperty(button)) {
-    console.log('NET FREQUENCY BUTTON: ', buttons.NET_FREQ[button])
-    return buttons.NET_FREQ[button]
-  } else if (buttons.SAMSUNG.hasOwnProperty(button)) {
-    console.log('SAMSUNG BUTTON: ', buttons.SAMSUNG[button])
-    return buttons.SAMSUNG[button]
-  } else if (buttons.NET.hasOwnProperty(button)) {
-    console.log('NET BUTTON: ', buttons.NET[button])
-    return buttons.NET[button]
-  } else {
-    console.log('Invalid button!', button)
-    return false
+function compareDate (command1, command2) {
+  if (command1.date < command2.date) {
+    return -1
   }
+  if (command1.date > command2.date) {
+    return 1
+  }
+  return 0
 }
 
 // Check if the command is a Infrared command and if is a valid button. Returns an array with DATE and BUTTON attributes
@@ -53,4 +45,23 @@ function cleanInput (data) {
       button: entry[1]
     }
   })
+}
+
+function checkButton (button) {
+  if (buttons.SAMSUNG_FREQ.hasOwnProperty(button)) {
+    console.log('SAMSUNG FREQUENCY BUTTON: ', buttons.SAMSUNG_FREQ[button])
+    return buttons.SAMSUNG_FREQ[button]
+  } else if (buttons.NET_FREQ.hasOwnProperty(button)) {
+    console.log('NET FREQUENCY BUTTON: ', buttons.NET_FREQ[button])
+    return buttons.NET_FREQ[button]
+  } else if (buttons.SAMSUNG.hasOwnProperty(button)) {
+    console.log('SAMSUNG BUTTON: ', buttons.SAMSUNG[button])
+    return buttons.SAMSUNG[button]
+  } else if (buttons.NET.hasOwnProperty(button)) {
+    console.log('NET BUTTON: ', buttons.NET[button])
+    return buttons.NET[button]
+  } else {
+    console.log('Invalid button!', button)
+    return false
+  }
 }
