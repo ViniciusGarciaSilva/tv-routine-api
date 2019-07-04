@@ -10,10 +10,10 @@ function parse (input) {
 exports.parse = parse
 
 function compareDate (command1, command2) {
-  if (command1.date < command2.date) {
+  if (command1.date.getTime() < command2.date.getTime()) {
     return -1
   }
-  if (command1.date > command2.date) {
+  if (command1.date.getTime() > command2.date.getTime()) {
     return 1
   }
   return 0
@@ -49,16 +49,12 @@ function cleanInput (data) {
 
 function checkButton (button) {
   if (buttons.SAMSUNG_FREQ.hasOwnProperty(button)) {
-    console.log('SAMSUNG FREQUENCY BUTTON: ', buttons.SAMSUNG_FREQ[button])
     return buttons.SAMSUNG_FREQ[button]
   } else if (buttons.NET_FREQ.hasOwnProperty(button)) {
-    console.log('NET FREQUENCY BUTTON: ', buttons.NET_FREQ[button])
     return buttons.NET_FREQ[button]
   } else if (buttons.SAMSUNG.hasOwnProperty(button)) {
-    console.log('SAMSUNG BUTTON: ', buttons.SAMSUNG[button])
     return buttons.SAMSUNG[button]
   } else if (buttons.NET.hasOwnProperty(button)) {
-    console.log('NET BUTTON: ', buttons.NET[button])
     return buttons.NET[button]
   } else {
     console.log('Invalid button!', button)
