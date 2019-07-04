@@ -4,7 +4,7 @@ const papa = require('papaparse')
 function parse (input) {
   let commands = cleanInput(papa.parse(input).data)
   commands.sort(compareDate)
-  console.log(commands)
+  // console.log(commands)
   return commands
 }
 exports.parse = parse
@@ -24,7 +24,7 @@ function cleanInput (data) {
   let button
   for (let i = 0; i < data.length; i++) {
     if (!data[i][1] || data[i][1] !== 'IRRX') {
-      console.log('Removing : ', data[i])
+      // console.log('Removing : ', data[i])
       data.splice(i, 1)
       i--
     } else {
@@ -33,7 +33,7 @@ function cleanInput (data) {
       if (button) {
         data[i][1] = button
       } else {
-        console.log('Removing : ', data[i])
+        // console.log('Removing : ', data[i])
         data.splice(i, 1)
         i--
       }
@@ -57,7 +57,7 @@ function checkButton (button) {
   } else if (buttons.NET.hasOwnProperty(button)) {
     return buttons.NET[button]
   } else {
-    console.log('Invalid button!', button)
+    // console.log('Invalid button!', button)
     return false
   }
 }

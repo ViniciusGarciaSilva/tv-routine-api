@@ -1,6 +1,5 @@
 const parser = require('../services/parser.service')
 const interpreter = require('../services/interpreting.service')
-const fs = require('fs')
 
 exports.post = async function (req, res, next) {
   const commands = req.body
