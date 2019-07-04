@@ -8,82 +8,106 @@ function interpretate (command) {
   let nextChannel = 500
   let isMenu = false
   let routine = []
-  let isPowerOn = true
+  let isPowerOn = true // tv state when the module was turned on
   for (let i = 0; i < command.length; i++) {
-    // console.log('\r\n', command[i])
     switch (command[i].button) {
       // CHANNEL
       case 'NET_ONE':
+        console.log('\n\rCommand: 1')
         nextChannel = composeChannel(nextChannel, 1)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true // next Button != number ????
         break
       case 'NET_TWO':
+        console.log('\n\rCommand: 2')
         nextChannel = composeChannel(nextChannel, 2)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_THREE':
+        console.log('\n\rCommand: 3')
         nextChannel = composeChannel(nextChannel, 3)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_FOUR':
+        console.log('\n\rCommand: 4')
         nextChannel = composeChannel(nextChannel, 4)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_FIVE':
+        console.log('\n\rCommand: 5')
         nextChannel = composeChannel(nextChannel, 5)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_SIX':
+        console.log('\n\rCommand: 6')
         nextChannel = composeChannel(nextChannel, 6)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_SEVEN':
+        console.log('\n\rCommand: 7')
         nextChannel = composeChannel(nextChannel, 7)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_EIGHT':
+        console.log('\n\rCommand: 8')
         nextChannel = composeChannel(nextChannel, 8)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_NINE':
+        console.log('\n\rCommand: 9')
         nextChannel = composeChannel(nextChannel, 9)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_ZERO':
+        console.log('\n\rCommand: 0')
         nextChannel = composeChannel(nextChannel, 0)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
 
       // USEFUL BUTTONS
       case 'NET_CHANNELUP':
+        console.log('\n\rCommand: Ch +')
         nextChannel = channel + 1
         isFinished = true // todo: delay? Change the channel everytime?
         break
       case 'NET_CHANNELDOWN':
+        console.log('\n\rCommand: CH -')
         nextChannel = channel - 1
         isFinished = true // todo: delay? Change the channel everytime?
         break
       case 'NET_BACK':
+        console.log('\n\rCommand: back')
         if (!isMenu) {
           nextChannel = lastChannel
           isFinished = true
         }
         break
       case 'NET_UP':
+        console.log('\n\rCommand: up')
         if (!isMenu) {
-          nextChannel++
+          if (nextChannel === 0) {
+            nextChannel = channel + 1
+          } else {
+            nextChannel++
+          }
         }
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'NET_DOWN':
+        console.log('\n\rCommand: down')
         if (!isMenu) {
-          nextChannel--
+          if (nextChannel === 0) {
+            nextChannel = channel - 1
+          } else {
+            nextChannel--
+          }
         }
-        isFinished = command[i + 1] ? checkFinished(command[i + 1].date.getTime() - command[i].date.getTime()) : false
+        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
         break
       case 'SAM_POWER':
+        console.log('\n\rCommand: power')
         isPowerOn = !isPowerOn
         start = command[i].date
+        console.log('PowerOn: ' + isPowerOn)
         break
       // EXTRA MENU NAVIGATION
       case 'NET_LEFT':
@@ -135,7 +159,6 @@ function interpretate (command) {
       case 'NET_REVERSE':
         break
     }
-    console.log('Switch end. Last Channel: ' + lastChannel + ' Channel: ' + channel + ' NextChannel: ' + nextChannel)
     if ((isFinished && nextChannel !== channel && nextChannel !== 0)) {
       finish = command[i].date
       if (isPowerOn) {
@@ -145,6 +168,7 @@ function interpretate (command) {
           finish: finish,
           time: finish - start
         })
+        console.log(routine[routine.length - 1])
       }
       lastChannel = channel
       channel = nextChannel
@@ -152,7 +176,7 @@ function interpretate (command) {
       isFinished = false
       start = command[i].date
       isMenu = false
-      // console.log('Modifying. Last Channel: ' + lastChannel + ' Channel: ' + channel + ' NextChannel: ' + nextChannel)
+      console.log('Last Channel: ' + lastChannel + ' Channel: ' + channel)
     }
   }
   return routine
