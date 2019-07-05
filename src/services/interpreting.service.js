@@ -1,8 +1,7 @@
 function interpretate (command) {
-  console.log('Interpretating')
   const delay = 3000 // delay between some button and another button
   let isFinished // Command is finished?
-  let start = command[0].date // start of the watch period
+  let start = command[0] ? command[0].date : null // start of the watch period
   let finish = 0 // end of the watch period
   let lastChannel = 500
   let channel = 500

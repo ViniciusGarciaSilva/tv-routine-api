@@ -8,7 +8,4 @@ exports.post = async function (req, res, next) {
   res.status(200).send({
     data: commandsInterpreted
   })
-  // res.status(400).send({
-  //  Erro: `${error}`
-  // })
 }
