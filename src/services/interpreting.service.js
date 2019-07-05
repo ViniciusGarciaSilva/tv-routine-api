@@ -1,16 +1,23 @@
+// Read the command and interpretate it as a:
+// - Channel Button
+// - Useful Button
+// - Extra Menu Navigation Button
+// - Useless Button
+// After that, the command is consumed. The isFinished variable indicates if the command was ended.
+// When is ended, the variables are updated and the information about what and how long time a channel was watched are added to the routine array
 function interpretate (command) {
   const delay = 3000 // delay between some button and another button
   let isFinished // Command is finished?
   let start = command[0] ? command[0].date : null // start of the watch period
   let finish = 0 // end of the watch period
   let lastChannel = 500
-  let channel = 500
+  let channel = 500 // default channel of this user
   let nextChannel = 500
   let isMenu = false
   let routine = []
   let isPowerOn = true // tv state when the module was turned on
   for (let i = 0; i < command.length; i++) {
-    console.log('\n\rCommand: ' + command[i].button)
+    console.log(' Command: ' + command[i].button)
     switch (command[i].button) {
       // CHANNEL
       case 'NET_ONE':
@@ -50,7 +57,6 @@ function interpretate (command) {
         isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_ZERO':
-        console.log('\n\rCommand: 0')
         nextChannel = composeChannel(nextChannel, 0)
         isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
@@ -95,6 +101,7 @@ function interpretate (command) {
         start = command[i].date
         console.log('PowerOn: ' + isPowerOn)
         break
+
       // EXTRA MENU NAVIGATION
       case 'NET_LEFT':
       case 'NET_RIGHT':
@@ -118,6 +125,7 @@ function interpretate (command) {
       case 'SAM_RETURN':
       case 'SAM_HOME':
         break
+
       // USELESS BUTTONS
       case 'NET_VOLUMEUP':
       case 'NET_VOLUMEDOWN':
@@ -135,8 +143,6 @@ function interpretate (command) {
       case 'SAM_VOLUMEDOWN':
       case 'SAM_CHANNELUP':
       case 'SAM_CHANNELDOWN':
-        break
-      // RECORD
       case 'NET_PLAY':
       case 'NET_FORWARD':
       case 'NET_REPLAY':
