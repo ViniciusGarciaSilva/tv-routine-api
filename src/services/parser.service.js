@@ -4,7 +4,7 @@ const papa = require('papaparse')
 function parse (input) {
   let commands = cleanInput(papa.parse(input).data)
   commands.sort(compareDate)
-  // console.log(commands)
+  console.log(commands)
   return commands
 }
 exports.parse = parse
@@ -20,33 +20,26 @@ function compareDate (command1, command2) {
 }
 
 // Check if the command is a Infrared command and if is a valid button. Returns an array with DATE and BUTTON attributes
-function cleanInput (data) {
+// command[i] = [timeStamp, signalType, button code] or
+// command[i] = [timeStamp, someMessage]
+function cleanInput (commands) {
   let button
-  for (let i = 0; i < data.length; i++) {
-    if (!data[i][1] || data[i][1] !== 'IRRX') {
-      // console.log('Removing : ', data[i])
-      data.splice(i, 1)
-      i--
+  let cleanCommands = []
+  for (let i = 0; i < commands.length; i++) {
+    button = commands[i][2] ? checkButton(commands[i][2]) : false
+    if (commands[i][1] === 'IRRX' && button) {
+      cleanCommands.push({
+        date: new Date(commands[i][0] * 1000),
+        button: button
+      })
     } else {
-      data[i].splice(1, 1)
-      button = checkButton(data[i][1])
-      if (button) {
-        data[i][1] = button
-      } else {
-        // console.log('Removing : ', data[i])
-        data.splice(i, 1)
-        i--
-      }
+      console.log('Invalid input', commands[i])
     }
   }
-  return data.map(entry => {
-    return {
-      date: new Date(entry[0] * 1000),
-      button: entry[1]
-    }
-  })
+  return cleanCommands
 }
 
+// Check if the IR code of the button or the name of the button is valid
 function checkButton (button) {
   if (buttons.SAMSUNG_FREQ.hasOwnProperty(button)) {
     return buttons.SAMSUNG_FREQ[button]
@@ -56,8 +49,6 @@ function checkButton (button) {
     return buttons.SAMSUNG[button]
   } else if (buttons.NET.hasOwnProperty(button)) {
     return buttons.NET[button]
-  } else {
-    // console.log('Invalid button!', button)
-    return false
   }
+  return false
 }
