@@ -1,5 +1,6 @@
 function interpretate (command) {
   console.log('Interpretating')
+  const delay = 3000 // delay between some button and another button
   let isFinished // Command is finished?
   let start = command[0].date // start of the watch period
   let finish = 0 // end of the watch period
@@ -10,79 +11,67 @@ function interpretate (command) {
   let routine = []
   let isPowerOn = true // tv state when the module was turned on
   for (let i = 0; i < command.length; i++) {
+    console.log('\n\rCommand: ' + command[i].button)
     switch (command[i].button) {
       // CHANNEL
       case 'NET_ONE':
-        console.log('\n\rCommand: 1')
         nextChannel = composeChannel(nextChannel, 1)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true // next Button != number ????
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true // next Button != number ????
         break
       case 'NET_TWO':
-        console.log('\n\rCommand: 2')
         nextChannel = composeChannel(nextChannel, 2)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_THREE':
-        console.log('\n\rCommand: 3')
         nextChannel = composeChannel(nextChannel, 3)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_FOUR':
-        console.log('\n\rCommand: 4')
         nextChannel = composeChannel(nextChannel, 4)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_FIVE':
-        console.log('\n\rCommand: 5')
         nextChannel = composeChannel(nextChannel, 5)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_SIX':
-        console.log('\n\rCommand: 6')
         nextChannel = composeChannel(nextChannel, 6)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_SEVEN':
-        console.log('\n\rCommand: 7')
         nextChannel = composeChannel(nextChannel, 7)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_EIGHT':
-        console.log('\n\rCommand: 8')
         nextChannel = composeChannel(nextChannel, 8)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_NINE':
-        console.log('\n\rCommand: 9')
         nextChannel = composeChannel(nextChannel, 9)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_ZERO':
         console.log('\n\rCommand: 0')
         nextChannel = composeChannel(nextChannel, 0)
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
 
       // USEFUL BUTTONS
       case 'NET_CHANNELUP':
-        console.log('\n\rCommand: Ch +')
         nextChannel = channel + 1
         isFinished = true // todo: delay? Change the channel everytime?
         break
       case 'NET_CHANNELDOWN':
-        console.log('\n\rCommand: CH -')
         nextChannel = channel - 1
         isFinished = true // todo: delay? Change the channel everytime?
         break
       case 'NET_BACK':
-        console.log('\n\rCommand: back')
         if (!isMenu) {
           nextChannel = lastChannel
           isFinished = true
         }
         break
       case 'NET_UP':
-        console.log('\n\rCommand: up')
         if (!isMenu) {
           if (nextChannel === 0) {
             nextChannel = channel + 1
@@ -90,10 +79,9 @@ function interpretate (command) {
             nextChannel++
           }
         }
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'NET_DOWN':
-        console.log('\n\rCommand: down')
         if (!isMenu) {
           if (nextChannel === 0) {
             nextChannel = channel - 1
@@ -101,10 +89,9 @@ function interpretate (command) {
             nextChannel--
           }
         }
-        isFinished = command[i + 1] ? checkFinished(command[i].date.getTime(), command[i + 1].date.getTime()) : true
+        isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'SAM_POWER':
-        console.log('\n\rCommand: power')
         isPowerOn = !isPowerOn
         start = command[i].date
         console.log('PowerOn: ' + isPowerOn)
@@ -191,9 +178,4 @@ function composeChannel (nextChannel, number) {
   } else {
     return (nextChannel * 10) + number
   }
-}
-
-// 3000 miliseconds delay between a command and another command
-function checkFinished (time1, time2) {
-  return time2 - time1 > 3000
 }
