@@ -4,7 +4,8 @@ const papa = require('papaparse')
 function parse (input) {
   let commands = cleanInput(papa.parse(input).data)
   commands.sort(compareDate)
-  console.log(commands)
+  commands = cleanPower(commands)
+  // console.log(commands)
   return commands
 }
 exports.parse = parse
@@ -33,7 +34,7 @@ function cleanInput (commands) {
         button: button
       })
     } else {
-      console.log('Invalid input', commands[i])
+      // console.log('Invalid input', commands[i])
     }
   }
   return cleanCommands
@@ -51,4 +52,21 @@ function checkButton (button) {
     return buttons.NET[button]
   }
   return false
+}
+
+// I don't know why the fuck the power entries is duplicated
+function cleanPower (commands) {
+  for (let i = 0; i < commands.length; i++) {
+    if (i !== commands.length - 1) {
+      if (commands[i].button === commands[i + 1].button && commands[i].button === buttons.SAMSUNG.SAM_POWER) {
+        // console.log('Indice: ' + i + ' SAM_POWER')
+        if (commands[i].date.getTime() === commands[i + 1].date.getTime()) {
+          commands.splice(i, 1)
+          i--
+          // console.log('REMOVING!' + commands[i] + commands[i + 1])
+        }
+      }
+    }
+  }
+  return commands
 }
