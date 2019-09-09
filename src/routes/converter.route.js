@@ -7,5 +7,6 @@ Object.defineProperty(exports, '__esModule', { value: true })
 var express1 = __importDefault(require('express'))
 var router = express1.default.Router()
 var converterController = require('../controllers/converter.controller')
-router.post('/', converterController.post)
+router.post('/', converterController.convert)
+router.post('/ia', converterController.convertIA)
 module.exports = router

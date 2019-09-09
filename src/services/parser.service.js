@@ -1,8 +1,7 @@
 const buttons = require('../model/buttons.model')
-const papa = require('papaparse')
 
 function parse (input) {
-  let commands = cleanInput(papa.parse(input).data)
+  let commands = cleanInput(input)
   commands.sort(compareDate)
   commands = cleanPower(commands)
   // console.log(commands)
