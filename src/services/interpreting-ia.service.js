@@ -20,8 +20,7 @@ function parse (data, startInput, finishInput) {
       channel = data[i].channel
     }
     result.push({
-      day: time.getDay(),
-      time: time.toString(),
+      date: time.toISOString(),
       channel: channel
     })
     console.log(result[result.length - 1])
