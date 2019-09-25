@@ -17,7 +17,7 @@ function interpretate (command) {
   let routine = []
   let isPowerOn = true // tv state when the module was turned on
   for (let i = 0; i < command.length; i++) {
-    console.log(' Command: ' + command[i].button)
+    // console.log(' Command: ' + command[i].button)
     switch (command[i].button) {
       // CHANNEL
       case 'NET_ONE':
@@ -99,7 +99,7 @@ function interpretate (command) {
       case 'SAM_POWER':
         isPowerOn = !isPowerOn
         start = command[i].date
-        console.log('PowerOn: ' + isPowerOn)
+        // console.log('PowerOn: ' + isPowerOn)
         break
 
       // EXTRA MENU NAVIGATION
@@ -153,14 +153,14 @@ function interpretate (command) {
     }
     if ((isFinished && nextChannel !== channel && nextChannel !== 0)) {
       finish = command[i].date
-      if (isPowerOn) {
+      if (isPowerOn && (finish - start) > 300000) {
         routine.push({
           channel: channel,
           start: start,
           finish: finish,
           time: finish - start
         })
-        console.log(routine[routine.length - 1])
+        // console.log(routine[routine.length - 1])
       }
       lastChannel = channel
       channel = nextChannel
@@ -168,7 +168,7 @@ function interpretate (command) {
       isFinished = false
       start = command[i].date
       isMenu = false
-      console.log('Last Channel: ' + lastChannel + ' Channel: ' + channel)
+      // console.log('Last Channel: ' + lastChannel + ' Channel: ' + channel)
     }
   }
   return routine
