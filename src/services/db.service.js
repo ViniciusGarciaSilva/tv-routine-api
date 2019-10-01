@@ -1,6 +1,5 @@
 function get (date) {
   let result
-  console.log('Searching for date = ', date.toISOString())
   result = dbMock.find(function (element) {
     return element.date === date.toISOString()
   })
