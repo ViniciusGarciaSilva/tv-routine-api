@@ -22,7 +22,7 @@ async function checkRoutine (date) {
             result.ch = channels[i].channel
           }
         }
-        console.log('Returning: ', result)
+        // console.log('Returning: ', result)
         resolve(result)
       })
       .catch(error => {
@@ -47,8 +47,8 @@ async function getLastWeeks (date) {
     for (const lastWeekDay of lastWeek) {
       await db.get(lastWeekDay)
         .then(response => {
-          console.log('Searching for date: ', date)
-          console.log('Result: ', response)
+          // console.log('Searching for date: ', date)
+          // console.log('Result: ', response)
           if (response === 'No result') {
             result.push({
               date: lastWeekDay.toISOString(),

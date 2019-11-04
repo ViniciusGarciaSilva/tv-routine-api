@@ -28,6 +28,8 @@ function cleanInput (commands) {
   for (let i = 0; i < commands.length; i++) {
     button = commands[i][2] ? checkButton(commands[i][2]) : false
     if (commands[i][1] === 'IRRX' && button) {
+      // console.log(commands[i][0], new Date(commands[i][0] * 1000))
+      // console.log(commands[i][2], button)
       cleanCommands.push({
         date: new Date(commands[i][0] * 1000),
         button: button
@@ -53,7 +55,7 @@ function checkButton (button) {
   return false
 }
 
-// I don't know why the fuck the power entries is duplicated
+// I don't know why the fuck the power entries are duplicated
 function cleanPower (commands) {
   for (let i = 0; i < commands.length; i++) {
     if (i !== commands.length - 1) {

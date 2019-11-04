@@ -1,3 +1,5 @@
+/** *************MOCK************ ***/
+
 function get (date) {
   let result
   result = dbMock.find(function (element) {

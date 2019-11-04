@@ -23,7 +23,7 @@ function parse (data, startInput, finishInput) {
       date: time.toISOString(),
       channel: channel
     })
-    console.log(result[result.length - 1])
+    // console.log(result[result.length - 1])
   }
   return result
 }
