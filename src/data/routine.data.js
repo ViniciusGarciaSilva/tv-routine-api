@@ -17,3 +17,18 @@ function get (date) {
   })
 }
 exports.get = get
+
+function set (data) {
+  return new Promise((resolve, reject) => {
+    // console.log('data: ', data)
+    axios.post(`https://tv-routine-db.herokuapp.com/routine`, { data: data })
+      .then(function (response) {
+        resolve(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+        reject(error)
+      })
+  })
+}
+exports.set = set

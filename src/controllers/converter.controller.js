@@ -1,6 +1,7 @@
 const parser = require('../services/parser.service')
 const interpreter = require('../services/interpreting.service')
 const interpreterIA = require('../services/interpreting-ia.service')
+const routineData = require('../data/routine.data')
 const papa = require('papaparse')
 
 exports.convert = async function (req, res, next) {
@@ -21,7 +22,10 @@ exports.convertIA = async function (req, res, next) {
   commands.shift()
   const commandsInterpreted = parseAndInterpreting(commands)
   const commandsInterpretedIA = interpreterIA.parse(commandsInterpreted, start, finish)
+  const status = await routineData.set(commandsInterpretedIA)
+  console.log(status)
   res.status(200).send({
+    status: status,
     data: commandsInterpretedIA
   })
 }
