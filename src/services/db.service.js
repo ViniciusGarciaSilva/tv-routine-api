@@ -3,7 +3,7 @@
 function get (date) {
   let result
   result = dbMock.find(function (element) {
-    return element.date === date.toISOString()
+    return element.date === date.toString()
   })
   return result
 }

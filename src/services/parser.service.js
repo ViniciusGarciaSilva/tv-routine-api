@@ -25,13 +25,19 @@ function compareDate (command1, command2) {
 function cleanInput (commands) {
   let button
   let cleanCommands = []
+  let date
   for (let i = 0; i < commands.length; i++) {
     button = commands[i][2] ? checkButton(commands[i][2]) : false
     if (commands[i][1] === 'IRRX' && button) {
       // console.log(commands[i][0], new Date(commands[i][0] * 1000))
       // console.log(commands[i][2], button)
+      date = new Date(commands[i][0] * 1000)
+      // SUMMER TIME
+      if (date.getTimezoneOffset() === 120) {
+        date.setHours(date.getHours() - 1)
+      }
       cleanCommands.push({
-        date: new Date(commands[i][0] * 1000),
+        date: date,
         button: button
       })
     } else {

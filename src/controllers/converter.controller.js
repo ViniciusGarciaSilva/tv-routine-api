@@ -16,8 +16,8 @@ exports.convertIA = async function (req, res, next) {
   const commands = papa.parse(req.body).data
   const start = new Date(commands[0][0])
   const finish = new Date(commands[0][1])
-  console.log('Start: ', start)
-  console.log('Finish: ', finish)
+  console.log('Start: ', start.toString())
+  console.log('Finish: ', finish.toString())
   commands.shift()
   const commandsInterpreted = parseAndInterpreting(commands)
   const commandsInterpretedIA = interpreterIA.parse(commandsInterpreted, start, finish)

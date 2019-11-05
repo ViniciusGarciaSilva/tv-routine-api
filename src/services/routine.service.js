@@ -51,7 +51,7 @@ async function getLastWeeks (date) {
           // console.log('Result: ', response)
           if (response === 'No result') {
             result.push({
-              date: lastWeekDay.toISOString(),
+              date: lastWeekDay.toString(),
               channel: '0' })
           } else {
             result.push(response)
