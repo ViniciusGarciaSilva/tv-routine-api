@@ -12,7 +12,8 @@ async function checkRoutine (date) {
     }
     getLastWeeks(date)
       .then(lastWeeks => {
-        lastWeeksWatched = lastWeeks.filter(element => element.ch !== 0)
+        lastWeeksWatched = lastWeeks.filter(element => element.channel !== '0')
+        console.log('lastWeeks: ', lastWeeksWatched)
         channels = countChannels(lastWeeksWatched)
         if (lastWeeksWatched.length >= 3) {
           result.powerOn = true
@@ -68,6 +69,9 @@ async function getLastWeeks (date) {
 function countChannels (channels) {
   let result = []
   let index
+  if (channels.length === 0) {
+    return result
+  }
   result.push({
     channel: channels[0].channel,
     counter: 1
