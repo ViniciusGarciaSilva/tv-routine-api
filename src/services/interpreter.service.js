@@ -7,7 +7,7 @@
 // When is ended, the variables are updated and the information about what and how long time a channel was watched are added to the routine array
 function interpretate (command) {
   const delay = 3000 // delay between some button and another button
-  let isFinished // Command is finished?
+  let isFinished = false // Command is finished?
   let start = command[0] ? command[0].date : null // start of the watch period
   let finish = 0 // end of the watch period
   let lastChannel = 500
@@ -15,7 +15,8 @@ function interpretate (command) {
   let nextChannel = 500
   let isMenu = false
   let routine = []
-  let isPowerOn = true // tv state when the module was turned on
+  let isPowerOn = false // tv state when the module was turned on
+  let changePower = false
   for (let i = 0; i < command.length; i++) {
     // console.log(' Command: ' + command[i].button)
     switch (command[i].button) {
@@ -97,8 +98,12 @@ function interpretate (command) {
         isFinished = command[i + 1] ? command[i + 1].date.getTime() - command[i].date.getTime() > delay : true
         break
       case 'SAM_POWER':
-        isPowerOn = !isPowerOn
-        start = command[i].date
+        changePower = true
+        if (isPowerOn) {
+          isFinished = true
+        } else {
+          start = command[i].date
+        }
         // console.log('PowerOn: ' + isPowerOn)
         break
 
@@ -151,9 +156,13 @@ function interpretate (command) {
       case 'NET_REVERSE':
         break
     }
-    if ((isFinished && nextChannel !== channel && nextChannel !== 0)) {
+    console.log('power: ' + isPowerOn + '   command: ' + command[i].button + '    lastChannel: ' + lastChannel + '   channel: ' + channel + '    nextChannel: ' + nextChannel + '    isFinished: ' + isFinished) 
+    console.log('start: ' + start + '     finish: ' + finish + '\n')
+    if ((isFinished && nextChannel !== channel)) {
+      console.log('ENTROU')
       finish = command[i].date
       if (isPowerOn && (finish - start) > 300000) {
+        console.log('ENTROU 2')
         routine.push({
           channel: channel,
           start: start,
@@ -170,10 +179,50 @@ function interpretate (command) {
       isMenu = false
       // console.log('Last Channel: ' + lastChannel + ' Channel: ' + channel)
     }
+    if (changePower) {
+      isPowerOn = !isPowerOn
+      changePower = false
+    }
   }
   return routine
 }
 exports.interpretate = interpretate
+
+function fill (data, startInput, finishInput) {
+  let result = []
+  let i = 0
+  let channel = 0
+  console.log(data)
+  // sort data by date
+  data.sort(function (a, b) {
+    return new Date(a.start) - new Date(b.start)
+  })
+
+  for (let time = new Date(startInput); time.getTime() <= finishInput.getTime(); time.setMinutes(time.getMinutes() + 1)) {
+    if (!data[i]) {
+      channel = 0
+    } else {
+      if (time.getTime() > data[i].finish.getTime()) {
+        i++
+        time.setMinutes(time.getMinutes() - 1)
+      } else {
+        if (time.getTime() < data[i].start.getTime()) {
+          channel = 0
+        }
+        if (time.getTime() >= data[i].start.getTime() && time.getTime() <= data[i].finish.getTime()) {
+          channel = data[i].channel
+        }
+      }
+    }
+    result.push({
+      date: time.toString(),
+      channel: channel
+    })
+    // console.log(result[result.length - 1])
+  }
+  return result
+}
+exports.fill = fill
 
 // if channel has 3 digits and receive another digit, it means a wrong channel and the next channel will be the new digit
 // if channel has less than 3 digits, the new digit will be added to the next channel

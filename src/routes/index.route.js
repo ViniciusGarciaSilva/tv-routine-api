@@ -8,7 +8,7 @@ var express1 = __importDefault(require('express'))
 var router = express1.default.Router()
 router.get('/', function (req, res, next) {
   res.status(200).send({
-    title: 'Tv-Routine-Data Server',
+    title: 'Tv Routine Api',
     version: '1.0.1'
   })
 })
