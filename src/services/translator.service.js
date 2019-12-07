@@ -1,36 +1,15 @@
 const buttons = require('../model/buttons.model')
 
-function parse (input) {
-  let commands = cleanInput(input)
-  commands.sort(compareDate)
-  commands = cleanPower(commands)
-  // console.log(commands)
-  return commands
-}
-exports.parse = parse
-
-function compareDate (command1, command2) {
-  if (command1.date.getTime() < command2.date.getTime()) {
-    return -1
-  }
-  if (command1.date.getTime() > command2.date.getTime()) {
-    return 1
-  }
-  return 0
-}
-
 // Check if the command is a Infrared command and if is a valid button. Returns an array with DATE and BUTTON attributes
 // command[i] = [timeStamp, signalType, button code] or
 // command[i] = [timeStamp, someMessage]
-function cleanInput (commands) {
+exports.translate = function (commands) {
   let button
   let cleanCommands = []
   let date
   for (let i = 0; i < commands.length; i++) {
     button = commands[i][2] ? checkButton(commands[i][2]) : false
     if (commands[i][1] === 'IRRX' && button) {
-      // console.log(commands[i][0], new Date(commands[i][0] * 1000))
-      // console.log(commands[i][2], button)
       date = new Date(commands[i][0] * 1000)
       // SUMMER TIME
       if (date.getTimezoneOffset() === 120) {
@@ -44,7 +23,19 @@ function cleanInput (commands) {
       // console.log('Invalid input', commands[i])
     }
   }
+  cleanCommands.sort(compareDate)
+  cleanCommands = cleanPower(cleanCommands)
   return cleanCommands
+}
+
+function compareDate (command1, command2) {
+  if (command1.date.getTime() < command2.date.getTime()) {
+    return -1
+  }
+  if (command1.date.getTime() > command2.date.getTime()) {
+    return 1
+  }
+  return 0
 }
 
 // Check if the IR code of the button or the name of the button is valid

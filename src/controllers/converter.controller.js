@@ -1,36 +1,43 @@
-const parser = require('../services/parser.service')
-const interpreter = require('../services/interpreting.service')
-const interpreterIA = require('../services/interpreting-ia.service')
+const translator = require('../services/translator.service')
+const interpreter = require('../services/interpreter.service')
 const routineData = require('../data/routine.data')
 const papa = require('papaparse')
 
-exports.convert = async function (req, res, next) {
+// basically for test
+exports.translate = async function (req, res, next) {
+  console.log('Translating')
   const commands = papa.parse(req.body).data
-  const commandsInterpreted = parseAndInterpreting(commands)
-  // console.log(commandsInterpreted)
+  const commandsTranslated = translator.translate(commands)
   res.status(200).send({
-    data: commandsInterpreted
+    data: commandsTranslated
   })
 }
 
-exports.convertIA = async function (req, res, next) {
+// basically for test
+exports.interpretate = async function (req, res, next) {
+  console.log('Interpretating')
+  const commands = papa.parse(req.body).data
+  const commandsTranslated = translator.translate(commands)
+  const commandsInterpretated = interpreter.interpretate(commandsTranslated)
+  res.status(200).send({
+    data: commandsInterpretated
+  })
+}
+
+exports.convert = async function (req, res, next) {
   const commands = papa.parse(req.body).data
   const start = new Date(commands[0][0])
   const finish = new Date(commands[0][1])
-  console.log('Start: ', start.toString())
-  console.log('Finish: ', finish.toString())
   commands.shift()
-  const commandsInterpreted = parseAndInterpreting(commands)
-  const commandsInterpretedIA = interpreterIA.parse(commandsInterpreted, start, finish)
-  const status = await routineData.set(commandsInterpretedIA)
+  const commandsTranslated = translator.translate(commands)
+  const commandsInterpretated = interpreter.interpretate(commandsTranslated)
+  const commandsFilled = interpreter.fill(commandsInterpretated, start, finish)
+  const status = await routineData.set(commandsFilled)
   console.log(status)
   res.status(200).send({
+    start: start,
+    finish: finish,
     status: status,
-    data: commandsInterpretedIA
+    data: commandsFilled
   })
-}
-
-function parseAndInterpreting (data) {
-  const parsed = parser.parse(data)
-  return interpreter.interpretate(parsed)
 }
