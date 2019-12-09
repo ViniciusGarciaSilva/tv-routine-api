@@ -156,13 +156,11 @@ function interpretate (command) {
       case 'NET_REVERSE':
         break
     }
-    console.log('power: ' + isPowerOn + '   command: ' + command[i].button + '    lastChannel: ' + lastChannel + '   channel: ' + channel + '    nextChannel: ' + nextChannel + '    isFinished: ' + isFinished) 
-    console.log('start: ' + start + '     finish: ' + finish + '\n')
+    // console.log('power: ' + isPowerOn + '   command: ' + command[i].button + '    lastChannel: ' + lastChannel + '   channel: ' + channel + '    nextChannel: ' + nextChannel + '    isFinished: ' + isFinished)
+    // console.log('start: ' + start + '     finish: ' + finish + '\n')
     if ((isFinished && nextChannel !== channel)) {
-      console.log('ENTROU')
       finish = command[i].date
       if (isPowerOn && (finish - start) > 300000) {
-        console.log('ENTROU 2')
         routine.push({
           channel: channel,
           start: start,
