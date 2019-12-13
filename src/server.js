@@ -1,7 +1,7 @@
 const app = require('./app')
 
 // Load HTTP module
-const port = normalizaPort(process.env.PORT || '5000')
+const port = normalizaPort(process.env.PORT || '7000')
 
 function normalizaPort (val) {
   const port = parseInt(val, 10)

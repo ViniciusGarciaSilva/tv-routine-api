@@ -24,20 +24,67 @@ exports.interpretate = async function (req, res, next) {
   })
 }
 
+exports.convertSimulation = async function (req, res, next) {
+  const commands = papa.parse(req.body).data
+  const fakeStart = new Date(commands[0][0])
+  const fakeFinish = new Date(commands[0][1])
+  const simulationDate = new Date(commands[1][0])
+  const start = new Date(commands[2][0])
+  const finish = new Date(commands[3][1])
+  console.log('start:     ', start, ' finish:     ', finish, ' date:', simulationDate)
+  console.log('fakestart: ', fakeStart, ' fakefinish: ', fakeFinish)
+  commands.shift()
+  commands.shift()
+  commands.shift()
+  console.log('Commands: ', commands)
+  const newCommands = commands.map(command => {
+    let newLog = command
+    let oldTimestamp = new Date(command[0] * 1000).getTime() // timestamp(string) => date => timestramp (int)
+    let newTimestamp = new Date((simulationDate.getTime() + oldTimestamp - start.getTime())).getTime() / 1000
+    console.log('simulationDate: ', simulationDate.getTime())
+    console.log('oldTimeStamp:   ', oldTimestamp)
+    console.log('start:          ', start.getTime())
+    console.log('newTimeStamp:   ', newTimestamp, '\n')
+    newLog[0] = newTimestamp.toString()
+    return newLog
+  })
+  console.log('New Commands: ', newCommands)
+  const commandsTranslated = translator.translate(newCommands)
+  const commandsInterpretated = interpreter.interpretate(commandsTranslated)
+  const commandsFilled = interpreter.fill(commandsInterpretated, fakeStart, fakeFinish)
+  const status = await routineData.set(commandsFilled)
+  console.log(status)
+  res.status(200).send({
+    start: start.toString(),
+    finish: finish.toString(),
+    status: status.toString(),
+    data: commandsFilled
+  })
+}
+
 exports.convert = async function (req, res, next) {
   const commands = papa.parse(req.body).data
   const start = new Date(commands[0][0])
+  // if (start.getTimezoneOffset() === 120) {
+  //   start.setHours(start.getHours() - 1)
+  // }
   const finish = new Date(commands[0][1])
+  // if (finish.getTimezoneOffset() === 120) {
+  //  finish.setHours(finish.getHours() - 1)
+  // }
   commands.shift()
+  console.log('Commands: ', commands)
   const commandsTranslated = translator.translate(commands)
+  console.log('Commands translated: ', commandsTranslated)
   const commandsInterpretated = interpreter.interpretate(commandsTranslated)
+  console.log('Commands interpretated: ', commandsInterpretated)
   const commandsFilled = interpreter.fill(commandsInterpretated, start, finish)
   const status = await routineData.set(commandsFilled)
   console.log(status)
   res.status(200).send({
-    start: start,
-    finish: finish,
-    status: status,
+    start: start.toString(),
+    finish: finish.toString(),
+    status: status.toString(),
     data: commandsFilled
   })
 }

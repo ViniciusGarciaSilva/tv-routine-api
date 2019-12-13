@@ -10,4 +10,5 @@ var converterController = require('../controllers/converter.controller')
 router.post('/translate', converterController.translate)
 router.post('/interpretate', converterController.interpretate)
 router.post('/convert', converterController.convert)
+router.post('/simulation', converterController.convertSimulation)
 module.exports = router

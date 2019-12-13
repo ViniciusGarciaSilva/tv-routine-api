@@ -12,9 +12,9 @@ exports.translate = function (commands) {
     if (commands[i][1] === 'IRRX' && button) {
       date = new Date(commands[i][0] * 1000)
       // SUMMER TIME
-      if (date.getTimezoneOffset() === 120) {
-        date.setHours(date.getHours() - 1)
-      }
+      // if (date.getTimezoneOffset() === 120) {
+      //  date.setHours(date.getHours() - 1)
+      // }
       cleanCommands.push({
         date: date,
         button: button

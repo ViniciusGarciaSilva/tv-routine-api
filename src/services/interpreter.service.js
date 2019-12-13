@@ -1,3 +1,5 @@
+const variables = require('../variables.js')
+
 // Read the command and interpretate it as a:
 // - Channel Button
 // - Useful Button
@@ -6,13 +8,14 @@
 // After that, the command is consumed. The isFinished variable indicates if the command was ended.
 // When is ended, the variables are updated and the information about what and how long time a channel was watched are added to the routine array
 function interpretate (command) {
-  const delay = 3000 // delay between some button and another button
+  const minimumTime = variables.minimumTime
+  const delay = variables.buttonDelay // delay between some button and another button
   let isFinished = false // Command is finished?
   let start = command[0] ? command[0].date : null // start of the watch period
   let finish = 0 // end of the watch period
-  let lastChannel = 500
-  let channel = 500 // default channel of this user
-  let nextChannel = 500
+  let lastChannel = 0
+  let channel = 0 // default channel of this user
+  let nextChannel = 0
   let isMenu = false
   let routine = []
   let isPowerOn = false // tv state when the module was turned on
@@ -160,7 +163,7 @@ function interpretate (command) {
     // console.log('start: ' + start + '     finish: ' + finish + '\n')
     if ((isFinished && nextChannel !== channel)) {
       finish = command[i].date
-      if (isPowerOn && (finish - start) > 300000) {
+      if (isPowerOn && channel !== 0 && (finish - start) > minimumTime) {
         routine.push({
           channel: channel,
           start: start,
@@ -190,13 +193,15 @@ function fill (data, startInput, finishInput) {
   let result = []
   let i = 0
   let channel = 0
-  console.log(data)
+  // console.log('Entrada do fill: ', data)
   // sort data by date
   data.sort(function (a, b) {
     return new Date(a.start) - new Date(b.start)
   })
 
-  for (let time = new Date(startInput); time.getTime() <= finishInput.getTime(); time.setMinutes(time.getMinutes() + 1)) {
+  for (let time = new Date(startInput); time.getTime() <= finishInput.getTime(); time.setSeconds(time.getSeconds() + 10)) {
+    // console.log(data[i])
+    // console.log('time: ', time)
     if (!data[i]) {
       channel = 0
     } else {
@@ -218,6 +223,7 @@ function fill (data, startInput, finishInput) {
     })
     // console.log(result[result.length - 1])
   }
+  console.log(result)
   return result
 }
 exports.fill = fill
