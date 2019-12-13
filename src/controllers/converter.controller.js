@@ -1,5 +1,6 @@
 const translator = require('../services/translator.service')
 const interpreter = require('../services/interpreter.service')
+const simulation = require('../services/simulation.service')
 const routineData = require('../data/routine.data')
 const papa = require('papaparse')
 
@@ -21,6 +22,23 @@ exports.interpretate = async function (req, res, next) {
   const commandsInterpretated = interpreter.interpretate(commandsTranslated)
   res.status(200).send({
     data: commandsInterpretated
+  })
+}
+
+exports.transform = async function (req, res, next) {
+  const data = papa.parse(req.body).data
+  console.log(data)
+  const start = new Date(data[0][0])
+  const finish = new Date(data[0][1])
+  const simulationDate = new Date(data[1][0])
+  const commands = data.slice(2)
+  const newCommands = simulation.transformDate(commands, simulationDate, start, finish)
+  console.log('oldCommands: ', commands)
+  console.log('newCommands: ', newCommands)
+  const newDataCSV = papa.unparse(newCommands)
+  console.log('CSV: ', newDataCSV)
+  res.status(200).send({
+    data: newDataCSV
   })
 }
 
@@ -65,13 +83,7 @@ exports.convertSimulation = async function (req, res, next) {
 exports.convert = async function (req, res, next) {
   const commands = papa.parse(req.body).data
   const start = new Date(commands[0][0])
-  // if (start.getTimezoneOffset() === 120) {
-  //   start.setHours(start.getHours() - 1)
-  // }
   const finish = new Date(commands[0][1])
-  // if (finish.getTimezoneOffset() === 120) {
-  //  finish.setHours(finish.getHours() - 1)
-  // }
   commands.shift()
   console.log('Commands: ', commands)
   const commandsTranslated = translator.translate(commands)
