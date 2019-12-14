@@ -7,7 +7,7 @@ const variables = require('../variables.js')
 // - Useless Button
 // After that, the command is consumed. The isFinished variable indicates if the command was ended.
 // When is ended, the variables are updated and the information about what and how long time a channel was watched are added to the routine array
-function interpretate (command) {
+function interpretate (startInput, finishInput, command) {
   const minimumTime = variables.minimumTime
   const delay = variables.buttonDelay // delay between some button and another button
   let isFinished = false // Command is finished?
@@ -21,6 +21,9 @@ function interpretate (command) {
   let isPowerOn = false // tv state when the module was turned on
   let changePower = false
   for (let i = 0; i < command.length; i++) {
+    if (command[i].date < startInput) {
+      continue
+    }
     // console.log(' Command: ' + command[i].button)
     switch (command[i].button) {
       // CHANNEL
@@ -193,7 +196,7 @@ function fill (data, startInput, finishInput) {
   let result = []
   let i = 0
   let channel = 0
-  // console.log('Entrada do fill: ', data)
+  console.log('Entrada do fill: ', startInput, finishInput)
   // sort data by date
   data.sort(function (a, b) {
     return new Date(a.start) - new Date(b.start)
@@ -207,7 +210,8 @@ function fill (data, startInput, finishInput) {
     } else {
       if (time.getTime() > data[i].finish.getTime()) {
         i++
-        time.setMinutes(time.getMinutes() - 1)
+        time.setSeconds(time.getSeconds() - 10)
+        channel = 0
       } else {
         if (time.getTime() < data[i].start.getTime()) {
           channel = 0
@@ -217,10 +221,12 @@ function fill (data, startInput, finishInput) {
         }
       }
     }
-    result.push({
-      date: time.toString(),
-      channel: channel
-    })
+    if (channel !== 0) {
+      result.push({
+        date: time.toString(),
+        channel: channel
+      })
+    }
     // console.log(result[result.length - 1])
   }
   console.log(result)

@@ -26,12 +26,14 @@ exports.interpretate = async function (req, res, next) {
 }
 
 exports.transform = async function (req, res, next) {
+  console.log('Transform')
   const data = papa.parse(req.body).data
   console.log(data)
   const start = new Date(data[0][0])
   const finish = new Date(data[0][1])
   const simulationDate = new Date(data[1][0])
   const commands = data.slice(2)
+  console.log('oldCommands: ', commands)
   const newCommands = simulation.transformDate(commands, simulationDate, start, finish)
   console.log('oldCommands: ', commands)
   console.log('newCommands: ', newCommands)
@@ -49,8 +51,8 @@ exports.convertSimulation = async function (req, res, next) {
   const simulationDate = new Date(commands[1][0])
   const start = new Date(commands[2][0])
   const finish = new Date(commands[3][1])
-  console.log('start:     ', start, ' finish:     ', finish, ' date:', simulationDate)
-  console.log('fakestart: ', fakeStart, ' fakefinish: ', fakeFinish)
+  console.log('start:     ', start.toString(), ' finish:     ', finish.toString(), ' date:', simulationDate.toString())
+  console.log('fakestart: ', fakeStart.toString(), ' fakefinish: ', fakeFinish.toString(), '\n')
   commands.shift()
   commands.shift()
   commands.shift()
@@ -81,16 +83,19 @@ exports.convertSimulation = async function (req, res, next) {
 }
 
 exports.convert = async function (req, res, next) {
+  console.log('Convertendo')
   const commands = papa.parse(req.body).data
   const start = new Date(commands[0][0])
   const finish = new Date(commands[0][1])
+  console.log('Start: ', start, '\nFinish: ', finish)
   commands.shift()
-  console.log('Commands: ', commands)
+  console.log('\nCommands: ', commands)
   const commandsTranslated = translator.translate(commands)
-  console.log('Commands translated: ', commandsTranslated)
-  const commandsInterpretated = interpreter.interpretate(commandsTranslated)
-  console.log('Commands interpretated: ', commandsInterpretated)
+  console.log('\nCommands translated: ', commandsTranslated)
+  const commandsInterpretated = interpreter.interpretate(start, finish, commandsTranslated)
+  console.log('\nCommands interpretated: ', commandsInterpretated)
   const commandsFilled = interpreter.fill(commandsInterpretated, start, finish)
+  console.log('Commands filled: ', commandsFilled)
   const status = await routineData.set(commandsFilled)
   console.log(status)
   res.status(200).send({

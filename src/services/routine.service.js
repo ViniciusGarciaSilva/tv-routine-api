@@ -40,7 +40,7 @@ async function getLastWeeks (date) {
   let result = []
 
   return new Promise(async (resolve, reject) => {
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 2; i++) {
       newDate = new Date(date)
       newDate.setDate(newDate.getDate() - 7 * i)
       lastWeek.push(newDate)
