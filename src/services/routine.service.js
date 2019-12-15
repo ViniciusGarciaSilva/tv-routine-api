@@ -13,9 +13,9 @@ async function checkRoutine (date) {
     getLastWeeks(date)
       .then(lastWeeks => {
         lastWeeksWatched = lastWeeks.filter(element => element.channel !== '0')
-        console.log('lastWeeks: ', lastWeeksWatched)
+        // console.log('lastWeeks: ', lastWeeksWatched)
         channels = countChannels(lastWeeksWatched)
-        console.log('Channels: ', channels)
+        // console.log('Channels: ', channels)
         if (lastWeeksWatched.length >= 2) {
           result.powerOn = true
         }
@@ -25,7 +25,7 @@ async function checkRoutine (date) {
           }
         }
         if (result.ch !== 0) {
-          console.log('Returning: ', result)
+          // console.log('Returning: ', result)
           resolve(result)
         } else {
           resolve(null)
@@ -50,12 +50,12 @@ async function getLastWeeks (date) {
       newDate.setDate(newDate.getDate() - 7 * i)
       lastWeek.push(newDate)
     }
-    console.log('Routine.service - getLastWeeks - lasweek: ', lastWeek)
+    // console.log('Routine.service - getLastWeeks - lasweek: ', lastWeek)
     for (const lastWeekDay of lastWeek) {
       await db.get(lastWeekDay)
         .then(response => {
-          console.log('Searching for date: ', date)
-          console.log('Result: ', response)
+          // console.log('Searching for date: ', date)
+          // console.log('Result: ', response)
           if (response !== null) {
             result.push(response)
           }

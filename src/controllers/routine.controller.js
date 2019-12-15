@@ -12,7 +12,7 @@ exports.routine = async function (req, res, next) {
   }
   let routines = []
   for (let i = 0; i < dates.length; i++) {
-    console.log('\nChecking routine from ', dates[i])
+    // console.log('\nChecking routine from ', dates[i])
     const result = await routineService.checkRoutine(dates[i])
     if (result !== null) {
       routines.push(result)

@@ -3,7 +3,7 @@ const axios = require('axios')
 function get (date) {
   return new Promise((resolve, reject) => {
     // axios.get(`https://tv-routine-db.herokuapp.com/routine/${date.toString()}`)
-    console.log('routine data - get - date: ', date)
+    // console.log('routine data - get - date: ', date)
     axios.get(`https://tv-routine-db.herokuapp.com/routine/${date.toString()}`)
       .then(function (response) {
         if (response.data.length === 0) {
